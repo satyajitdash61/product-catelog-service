@@ -3,6 +3,10 @@ package org.example.ProductCatelogService.controllers;
 import org.example.ProductCatelogService.dtos.ProductDto;
 import org.example.ProductCatelogService.models.Product;
 import org.example.ProductCatelogService.service.IProductService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,13 +25,26 @@ public class ProductController {
         return null;
     }
     @GetMapping("/{id}")
-    public Product getProduct(@PathVariable("id") Long prouctId){
+    public ResponseEntity<Product> getProduct(@PathVariable("id") Long prouctId){
 //    Product product = new Product();
 //    product.setId(prouctId);
 //    product.setName("Iphone");
 //    product.setPrice(100000D);
 //    return product;
-        return productService.getProduct(prouctId);
+        MultiValueMap<String, String> header = new LinkedMultiValueMap<>();
+        header.add("called by", "smart frontend");
+        try {
+            if(prouctId < 1){
+                header.add("called by", "Pagal frontend");
+                throw new IllegalArgumentException("id is invalid");
+            }
+            Product product =  productService.getProduct(prouctId);
+            return new ResponseEntity<>(product, header, HttpStatus.OK);
+        }
+        catch (Exception ex){
+            return new ResponseEntity<>(header,HttpStatus.BAD_REQUEST);
+        }
+
     }
 
     @PostMapping
