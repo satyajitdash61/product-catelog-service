@@ -5,7 +5,13 @@ import org.example.ProductCatelogService.dtos.ProductDto;
 import org.example.ProductCatelogService.models.Category;
 import org.example.ProductCatelogService.models.Product;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RequestCallback;
+import org.springframework.web.client.ResponseExtractor;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -35,10 +41,26 @@ public class ProductService implements IProductService {
         return getProduct(fakeStoreProductDto);
     }
     @Override
-    public Product createProduct(ProductDto productDto){
+    public Product createProduct(Product product){
         RestTemplate restTemplate = restTemplateBuilder.build();
-        FakeStoreProductDto fakeStoreProductDto = restTemplate.postForEntity("https://fakestoreapi.com/products", productDto, FakeStoreProductDto.class).getBody();
+        FakeStoreProductDto fakeStoreProductDtoreq = getFakeStoreProductDto(product);
+        FakeStoreProductDto fakeStoreProductDto = restTemplate.postForEntity("https://fakestoreapi.com/products", fakeStoreProductDtoreq, FakeStoreProductDto.class).getBody();
         return getProduct(fakeStoreProductDto);
+    }
+
+    @Override
+    public Product replaceProduct(Long id, Product product){
+        RestTemplate restTemplate = restTemplateBuilder.build();
+        FakeStoreProductDto fakeStoreProductDtoreq = getFakeStoreProductDto(product);
+        ResponseEntity<FakeStoreProductDto> fakeStoreProductDtoResponseEntity =  putForEntity("https://fakestoreapi.com/products/{id}", fakeStoreProductDtoreq, FakeStoreProductDto.class, id);
+        return getProduct(fakeStoreProductDtoResponseEntity.getBody());
+    }
+
+    private <T> ResponseEntity<T> putForEntity(String url, @Nullable Object request, Class<T> responseType, Object... uriVariables) throws RestClientException {
+        RestTemplate restTemplate = restTemplateBuilder.build();
+        RequestCallback requestCallback = restTemplate.httpEntityCallback(request, responseType);
+        ResponseExtractor<ResponseEntity<T>> responseExtractor = restTemplate.responseEntityExtractor(responseType);
+        return restTemplate.execute(url, HttpMethod.PUT, requestCallback, responseExtractor, uriVariables);
     }
 
     private Product getProduct(FakeStoreProductDto fakeStoreProductDto){
@@ -52,6 +74,20 @@ public class ProductService implements IProductService {
         category.setName(fakeStoreProductDto.getCategory());
         product.setCategory((category));
         return product;
+
+    }
+
+    private FakeStoreProductDto getFakeStoreProductDto(Product product){
+        FakeStoreProductDto fakeStoreProductDto = new FakeStoreProductDto();
+        fakeStoreProductDto.setId(product.getId());
+        fakeStoreProductDto.setTitle(product.getName());
+        fakeStoreProductDto.setDescription(product.getDescription());
+        fakeStoreProductDto.setPrice(product.getPrice());
+        if(product.getCategory() != null){
+            fakeStoreProductDto.setCategory(product.getCategory().getName());
+        }
+
+        return fakeStoreProductDto;
 
     }
 }

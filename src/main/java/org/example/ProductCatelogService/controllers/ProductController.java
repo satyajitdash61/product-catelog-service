@@ -1,5 +1,6 @@
 package org.example.ProductCatelogService.controllers;
 
+import org.example.ProductCatelogService.dtos.FakeStoreProductDto;
 import org.example.ProductCatelogService.dtos.ProductDto;
 import org.example.ProductCatelogService.models.Product;
 import org.example.ProductCatelogService.service.IProductService;
@@ -49,6 +50,25 @@ public class ProductController {
 
     @PostMapping
     public Product createProduct(@RequestBody ProductDto productDto){
-        return productService.createProduct(productDto);
+        return productService.createProduct(getProduct(productDto));
     }
+
+    @PutMapping("/{id}")
+    public Product replaceProduct(@PathVariable("id") Long id, @RequestBody ProductDto productDto){
+        return productService.replaceProduct(id, getProduct(productDto));
+    }
+
+//    mapper
+    private Product getProduct(ProductDto productDto){
+        Product product = new Product();
+        product.setId(productDto.getId());
+        product.setName(productDto.getName());
+        product.setPrice(productDto.getPrice());
+        product.setDescription(productDto.getDescription());
+        product.setImageUrl(productDto.getImageUrl());
+        product.setCategory(productDto.getCategory());
+        return product;
+    }
+
+
 }
