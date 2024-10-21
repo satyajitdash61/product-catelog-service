@@ -32,20 +32,29 @@ public class ProductController {
 //    product.setName("Iphone");
 //    product.setPrice(100000D);
 //    return product;
-        MultiValueMap<String, String> header = new LinkedMultiValueMap<>();
-        header.add("called by", "smart frontend");
-        try {
+//        MultiValueMap<String, String> header = new LinkedMultiValueMap<>();
+//        header.add("called by", "smart frontend");
+//        try {
+//            if(prouctId < 1){
+//                header.add("called by", "Pagal frontend");
+//                throw new IllegalArgumentException("id is invalid");
+//            }
+//            Product product =  productService.getProduct(prouctId);
+//            return new ResponseEntity<>(product, header, HttpStatus.OK);
+//        }
+//        catch (Exception ex){
+//            return new ResponseEntity<>(header,HttpStatus.BAD_REQUEST);
+//        }
+        try{
             if(prouctId < 1){
-                header.add("called by", "Pagal frontend");
                 throw new IllegalArgumentException("id is invalid");
             }
             Product product =  productService.getProduct(prouctId);
-            return new ResponseEntity<>(product, header, HttpStatus.OK);
+            return new ResponseEntity<>(product, HttpStatus.OK);
         }
         catch (Exception ex){
-            return new ResponseEntity<>(header,HttpStatus.BAD_REQUEST);
+            throw ex;
         }
-
     }
 
     @PostMapping

@@ -1,5 +1,6 @@
 package org.example.ProductCatelogService.service;
 
+import org.example.ProductCatelogService.clients.FakeStore.FakeStoreApiClient;
 import org.example.ProductCatelogService.dtos.FakeStoreProductDto;
 import org.example.ProductCatelogService.dtos.ProductDto;
 import org.example.ProductCatelogService.models.Category;
@@ -20,6 +21,7 @@ import java.util.List;
 @Service
 public class ProductService implements IProductService {
     private RestTemplateBuilder restTemplateBuilder;
+    private FakeStoreApiClient fakeStoreApiClient;
 
     public ProductService(RestTemplateBuilder restTemplateBuilder){
     this.restTemplateBuilder = restTemplateBuilder;
@@ -36,8 +38,8 @@ public class ProductService implements IProductService {
     }
     @Override
     public Product getProduct(Long prouctId){
-        RestTemplate restTemplate = restTemplateBuilder.build();
-        FakeStoreProductDto fakeStoreProductDto = restTemplate.getForEntity("https://fakestoreapi.com/products/{id}", FakeStoreProductDto.class, prouctId).getBody();
+
+        FakeStoreProductDto fakeStoreProductDto = fakeStoreApiClient.getProduct(prouctId);
         return getProduct(fakeStoreProductDto);
     }
     @Override
