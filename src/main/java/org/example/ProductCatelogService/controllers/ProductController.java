@@ -1,13 +1,10 @@
 package org.example.ProductCatelogService.controllers;
 
-import org.example.ProductCatelogService.dtos.FakeStoreProductDto;
 import org.example.ProductCatelogService.dtos.ProductDto;
-import org.example.ProductCatelogService.models.Product;
+import org.example.ProductCatelogService.entities.Product;
 import org.example.ProductCatelogService.service.IProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

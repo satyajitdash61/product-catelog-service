@@ -1,8 +1,8 @@
-package org.example.ProductCatelogService.models;
+package org.example.ProductCatelogService.entities;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@Table(name = "category")
 //@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Category extends BaseModel{
     private String name;

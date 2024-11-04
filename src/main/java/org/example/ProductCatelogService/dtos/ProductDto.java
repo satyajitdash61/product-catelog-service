@@ -2,7 +2,7 @@ package org.example.ProductCatelogService.dtos;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.example.ProductCatelogService.models.Category;
+import org.example.ProductCatelogService.entities.Category;
 
 @Getter
 @Setter

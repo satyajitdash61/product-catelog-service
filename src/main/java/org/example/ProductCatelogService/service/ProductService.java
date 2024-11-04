@@ -2,10 +2,10 @@ package org.example.ProductCatelogService.service;
 
 import org.example.ProductCatelogService.clients.FakeStore.FakeStoreApiClient;
 import org.example.ProductCatelogService.dtos.FakeStoreProductDto;
-import org.example.ProductCatelogService.dtos.ProductDto;
-import org.example.ProductCatelogService.models.Category;
-import org.example.ProductCatelogService.models.Product;
+import org.example.ProductCatelogService.entities.Category;
+import org.example.ProductCatelogService.entities.Product;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
